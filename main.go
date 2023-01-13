@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"lzx/go12306/api"
+	"lzx/go12306/http"
 	"os"
 	"time"
 
@@ -178,6 +180,22 @@ func main() {
 		panic("")
 	}
 
-	time.Sleep(10 * time.Second)
+	cookies, err := wd.GetCookies()
+	if err != nil {
+		panic("")
+	}
+
+	var cookie string
+	for k, v := range cookies {
+		cookie += v.Name + "=" + v.Value
+		if k != len(cookie)-1 {
+			cookie += "; "
+		}
+	}
+
+	http.SetCookie(cookie)
+	api.LoginConf()
+
+	fmt.Println(cookies)
 
 }
